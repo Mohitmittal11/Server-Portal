@@ -1,6 +1,7 @@
+"use client";
 import React, { useState } from "react";
 import Select from "react-select";
-import { TitleText } from "../TitleText/page";
+import TitleText from "../TitleText/titleText";
 
 interface SelectCompoProps {
   resStyle?: string;
