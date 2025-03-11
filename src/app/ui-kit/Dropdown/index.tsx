@@ -70,7 +70,7 @@ export default function SelectCompo(props: SelectCompoProps) {
       <div
         className={`${
           isFocused ? "border-black" : "border-textboxBorder"
-        } border font-medium text-sm placeholder:text-gray mobile:h-11 h-10 rounded-lg w-full relative ${restStyle}`}
+        } border font-medium text-sm placeholder:text-gray-900 mobile:h-11 h-10 rounded-lg w-full relative ${restStyle}`}
       >
         <Select
           onChange={(selectedOption) => onChange(selectedOption)}

@@ -7,6 +7,7 @@ import { appRoutes } from "@/constants/route";
 import { userLogin } from "@/lib/auth/auth";
 import { toastifyError, toastifySuccess } from "@/shared/utils/toastify";
 import { useState } from "react";
+import Loader from "@/components/Loader";
 
 type FormData = {
   email: string;
@@ -24,16 +25,20 @@ export default function LoginPage() {
 
   const router = useRouter();
   const [isPasswordShow, setIsPasswordShow] = useState<boolean>(false);
+  const [isLoading, setIsLoading] = useState<boolean>(false);
   const onSubmit = async (data: FormData) => {
     try {
+      setIsLoading(true);
       const res = await userLogin(data);
       if (res.code == 200) {
         toastifySuccess(`Login Successfully`, new Date().getTime().toString());
         // localStorage.setItem("userId", res.)
         router.push("/user");
+        setIsLoading(false);
       }
     } catch (error: any) {
       if (error) {
+        setIsLoading(false);
         toastifyError(
           error?.response.data.message,
           new Date().getTime().toString()
@@ -131,7 +136,7 @@ export default function LoginPage() {
             type="submit"
             className="w-full rounded-md bg-blue-500 px-4 py-2 text-white transition hover:bg-blue-600"
           >
-            Login
+            {isLoading ? <Loader /> : "Login"}
           </button>
         </form>
         <p

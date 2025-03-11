@@ -6,7 +6,6 @@ import useUserAuthStore from "@/stores/userAuthStore";
 const Logout = () => {
   const router = useRouter();
   const { setAuthData } = useUserAuthStore();
-
   const handleLogout = () => {
     const isLogoutConfirm = window.confirm("Are You Sure want to logout ?");
     if (isLogoutConfirm) {

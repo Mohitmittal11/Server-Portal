@@ -4,6 +4,7 @@ import useUserAuthStore from "@/stores/userAuthStore";
 import { serverList } from "@/ts/interfaces/Server";
 import { ListServer } from "@/lib/server";
 import Pagination from "@/components/Pagination";
+import Link from "next/link";
 
 const User = () => {
   const { authData } = useUserAuthStore();
@@ -65,7 +66,9 @@ const User = () => {
                       <td className="border p-3">{item.type}</td>
                       <td className="border p-3">{item.serverPort}</td>
                       <td className="border p-3 text-blue-600 underline cursor-pointer">
-                        {item.serverString}
+                        <Link href={item.serverString} target="_blank">
+                          {item.serverString}
+                        </Link>
                       </td>
                       <td className="border p-3">{item.npmPort}</td>
                     </tr>

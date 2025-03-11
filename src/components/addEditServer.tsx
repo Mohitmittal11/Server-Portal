@@ -15,6 +15,7 @@ interface AddEditServerInterface {
   serverDetails?: serverList | null;
   setServerDetails: (body: serverList | null) => void;
   handleUpdate: (id: string, bodyData: any) => void;
+  isLoading: boolean;
 }
 
 const AddEditServer: React.FC<AddEditServerInterface> = ({
@@ -24,6 +25,7 @@ const AddEditServer: React.FC<AddEditServerInterface> = ({
   serverDetails,
   setServerDetails,
   handleUpdate,
+  isLoading,
 }) => {
   const {
     register,
@@ -120,7 +122,7 @@ const AddEditServer: React.FC<AddEditServerInterface> = ({
           options={serverDropdown}
           onChange={(item: any) => handleEnvironmentChange(item)}
           placeholder="Select Environment"
-          value={selectedEnv}
+          value={selectedEnv.label ? selectedEnv : 0}
         />
         {errors.environment && (
           <p className="text-red-500 text-xs mt-1">
@@ -198,7 +200,13 @@ const AddEditServer: React.FC<AddEditServerInterface> = ({
             type="submit"
             className="w-full bg-blue-500 text-white font-semibold py-2 rounded-lg hover:bg-blue-700"
           >
-            {serverDetails ? "Update" : "Submit"}
+            {serverDetails && isLoading
+              ? "Updating"
+              : serverDetails && !isLoading
+              ? "Update"
+              : !serverDetails && isLoading
+              ? "Submitting"
+              : "Submit"}
           </button>
         </div>
       </form>
