@@ -1,18 +1,13 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 "use client";
 import AddEditModal from "@/components/addEditUser";
-import {
-  addUser,
-  DeleteUser,
-  editUser,
-  userDetails,
-  userList,
-} from "@/lib/auth/auth";
+import { addUser, editUser, userDetails, userList } from "@/lib/auth/auth";
 import { Fragment, useCallback, useEffect, useState } from "react";
 import { FormDataType } from "@/components/addEditUser";
 import { toastifyError, toastifySuccess } from "@/shared/utils/toastify";
 import { userData } from "@/ts/interfaces/Auth";
 import Pagination from "@/components/Pagination";
+import DeleteModal from "@/components/modal/DeleteModal";
 
 export default function UsersPage() {
   const [user, setUser] = useState<userData[]>([]);
@@ -23,6 +18,8 @@ export default function UsersPage() {
   const [totalCount, setTotalCount] = useState<number>(1);
   const [page, setPage] = useState<number>(1);
   const [role, setRole] = useState<string>("");
+  const [showDeleteModal, setShowDeleteModal] = useState<boolean>(false);
+  const [deleteUserId, setDeleteUserId] = useState<string>("");
   const perPage = 10;
   useEffect(() => {
     list({ page: page, perPage: perPage });
@@ -48,13 +45,14 @@ export default function UsersPage() {
     [setPage, page]
   );
 
-  const handleDelete = async (id: string) => {
-    const response = await DeleteUser(id);
-    if (response.code == 200) {
-      setPage(1);
-      list({ page: 1, perPage: perPage });
-    }
-  };
+  // const handleDelete = async (id: string) => {
+  //   setShowDeleteModal(true);
+  //   const response = await DeleteUser(id);
+  //   if (response.code == 200) {
+  //     setPage(1);
+  //     list({ page: 1, perPage: perPage });
+  //   }
+  // };
 
   const handleUserDetails = async (id: string) => {
     const response = await userDetails(id);
@@ -62,6 +60,11 @@ export default function UsersPage() {
       setDetails(response.data);
       setIsuserAddModal(true);
     }
+  };
+
+  const handleDeleteModalshow = (id: string) => {
+    setShowDeleteModal(true);
+    setDeleteUserId(id);
   };
 
   const handleUpdateUser = async (data: FormDataType, id: string) => {
@@ -96,7 +99,7 @@ export default function UsersPage() {
         toastifySuccess(response.message, new Date().getTime().toString());
         setIsuserAddModal(false);
         setIsLoading(false);
-        list();
+        list({ page: page, perPage: perPage });
         setDetails(null);
       }
     } catch (error: any) {
@@ -176,7 +179,7 @@ export default function UsersPage() {
                         </button>
                         <button
                           className="rounded bg-red-500 px-3 py-1 text-white hover:bg-red-600"
-                          onClick={() => handleDelete(user._id)}
+                          onClick={() => handleDeleteModalshow(user._id)}
                         >
                           Delete
                         </button>
@@ -194,6 +197,16 @@ export default function UsersPage() {
                     updateUser={handleUpdateUser}
                     // resetData={resetData}
                   />
+                  {showDeleteModal && (
+                    <DeleteModal
+                      setShowDeleteModal={setShowDeleteModal}
+                      deleteUserId={deleteUserId}
+                      fetchData={() => {
+                        setPage(1);
+                        list({ page: 1, perPage: perPage });
+                      }}
+                    />
+                  )}
                 </tbody>
               </table>
             </div>

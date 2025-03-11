@@ -78,6 +78,11 @@ const AddEditModal: React.FC<AddEditModalInterface> = ({
             </label>
             <input
               type="text"
+              onKeyDown={(e) => {
+                if (e.code === "Space" && !e.currentTarget.value) {
+                  e.preventDefault();
+                }
+              }}
               {...register("username", { required: "Username is required" })}
               className="mt-1 p-2 w-full border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
               placeholder="Enter username"
@@ -92,6 +97,11 @@ const AddEditModal: React.FC<AddEditModalInterface> = ({
             </label>
             <input
               type="email"
+              onKeyDown={(e) => {
+                if (e.code === "Space" && !e.currentTarget.value) {
+                  e.preventDefault();
+                }
+              }}
               {...register("email", {
                 required: "Email is required",
                 pattern: {

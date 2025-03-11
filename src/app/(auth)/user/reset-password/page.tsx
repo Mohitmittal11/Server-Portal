@@ -6,6 +6,7 @@ import React, { useState } from "react";
 import { useForm } from "react-hook-form";
 import { useRouter } from "next/navigation";
 import { appRoutes } from "@/constants/route";
+import Loader from "@/components/Loader";
 
 export interface ResetPasswordInterface {
   email: string;
@@ -17,6 +18,7 @@ const ResetPassword: React.FC = () => {
   const router = useRouter();
 
   const [isPasswordShow, setIsPasswordShow] = useState<boolean>(false);
+  const [isLoading, setIsLoading] = useState<boolean>(false);
   const [isConfirmPasswordShow, setIsConfirmPasswordShow] =
     useState<boolean>(false);
 
@@ -29,6 +31,7 @@ const ResetPassword: React.FC = () => {
 
   const onSubmit = async (data: ResetPasswordInterface) => {
     try {
+      setIsLoading(true);
       const response = await resetPassword(data);
       if (response.code == 200) {
         toastifySuccess(
@@ -36,8 +39,10 @@ const ResetPassword: React.FC = () => {
           new Date().getTime().toString()
         );
         router.push(appRoutes.user.userLogin);
+        setIsLoading(false);
       }
     } catch (error: any) {
+      setIsLoading(false);
       toastifyError(
         error?.response.data.message,
         new Date().getTime().toString()
@@ -179,7 +184,7 @@ const ResetPassword: React.FC = () => {
             type="submit"
             className="w-full px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600 transition duration-200"
           >
-            Reset Password
+            {isLoading ? <Loader /> : "Reset Password"}
           </button>
         </form>
       </div>

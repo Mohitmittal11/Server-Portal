@@ -8,6 +8,7 @@ import { useForm } from "react-hook-form";
 import { useRouter } from "next/navigation";
 import { appRoutes } from "@/constants/route";
 import { useState } from "react";
+import Loader from "@/components/Loader";
 
 type FormData = {
   email: string;
@@ -24,22 +25,25 @@ export default function LoginPage() {
   } = useForm<FormData>();
 
   const [isPasswordShow, setIsPasswordShow] = useState<boolean>(false);
+  const [isLoading, setIsLoading] = useState<boolean>(false);
   // const [password, setPass]
   // useEffect(() => {
   //   toastifySuccess(`hello`, new Date().getTime().toString());
   // }, []);
-  const passwordValue = watch("password");
 
   const router = useRouter();
   const onSubmit = async (data: AdminLogin) => {
     try {
+      setIsLoading(true);
       const res = await adminLogin(data);
       if (res.code == 200) {
         toastifySuccess(`Login Successfully`, new Date().getTime().toString());
         router.push(appRoutes.admin.list);
+        setIsLoading(false);
         reset();
       }
     } catch (error: any) {
+      setIsLoading(false);
       toastifyError(
         error?.response.data.message,
         new Date().getTime().toString()
@@ -136,7 +140,7 @@ export default function LoginPage() {
             type="submit"
             className="w-full rounded-md bg-blue-500 px-4 py-2 text-white transition hover:bg-blue-600"
           >
-            Login
+            {isLoading ? <Loader /> : "Login"}
           </button>
         </form>
       </div>
