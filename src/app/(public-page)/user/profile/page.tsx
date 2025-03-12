@@ -18,7 +18,7 @@ const Profile = () => {
         </p>
       ) : (
         <div className="mt-28">
-          <div className="flex justify-center gap-10 border max-w-fit p-10 bg-zinc-200 m-auto shadow-slate-300">
+          <div className="flex-cols mobile:flex mobile:gap-8 justify-center m-auto max-w-fit max-h-fit p-10 bg-zinc-200  shadow-slate-300">
             <p className="text-gray-500 font-medium">
               Username{" "}
               <span className="block text-blue-500">{authData?.username}</span>
@@ -31,7 +31,6 @@ const Profile = () => {
               Role <span className="block text-blue-500">{authData?.role}</span>
             </p>
           </div>
-          {/* <h3>USer Home Page</h3> */}
         </div>
       )}
     </Fragment>

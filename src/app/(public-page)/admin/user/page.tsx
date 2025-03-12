@@ -17,20 +17,34 @@ export default function UsersPage() {
   const [details, setDetails] = useState<userData | null>(null);
   const [totalCount, setTotalCount] = useState<number>(1);
   const [page, setPage] = useState<number>(1);
-  const [role, setRole] = useState<string>("");
   const [showDeleteModal, setShowDeleteModal] = useState<boolean>(false);
+  const [searchTerm, setSearchTerm] = useState<string>("");
   const [deleteUserId, setDeleteUserId] = useState<string>("");
   const perPage = 10;
+
   useEffect(() => {
-    list({ page: page, perPage: perPage });
+    list({ page: page, perPage: perPage, search: searchTerm });
   }, [page]);
-  const list = async (data?: { page: number; perPage: number }) => {
+  useEffect(() => {
+    const delayDebounceFn = setTimeout(() => {
+      list({ page: page, perPage: perPage, search: searchTerm });
+    }, 300);
+
+    return () => clearTimeout(delayDebounceFn);
+  }, [searchTerm]);
+
+  const list = async (data: {
+    page: number;
+    perPage: number;
+    search?: string;
+  }) => {
     try {
       const response = await userList(data);
       if (response.code == 200) {
         setUser(response.data);
         setTotalCount(response?.totalCount);
         setIsPageLoad(false);
+        setPage(data.page);
       }
     } catch (error) {
       setIsPageLoad(false);
@@ -112,9 +126,29 @@ export default function UsersPage() {
     }
   }, []);
 
+  const handleSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setSearchTerm(e.target.value);
+  };
+
   return (
     <Fragment>
-      <div className="bg-gray-100 p-6">
+      <div className="flex mobile:justify-end justify-between gap-8 items-center px-2">
+        <input
+          onChange={handleSearch}
+          type="text"
+          name="search"
+          id="search"
+          placeholder="Search by Project Name"
+          className="border max-w-lg h-8 mobile:pl-3 pl-1 bg-gray-100 focus:outline-none focus-within:text-gray-500 mobile:placeholder:text-sm placeholder:text-xs text-[12px] placeholder:text-gray-400 border-t-transparent border-x-transparent"
+        />
+        <button
+          onClick={() => setIsuserAddModal(true)}
+          className="px-4 py-2 w-fit bg-blue-500 text-white rounded-md shadow-md cursor-pointer hover:bg-blue-600 text-nowrap mobile:text-base text-sm"
+        >
+          Add User
+        </button>
+      </div>
+      <div className="bg-gray-100 mt-12">
         {/* <select
           onChange={(e) => setRole(e.target.value)}
           className="px-4 py-2 w-fit cursor-pointer bg-blue-500 text-white outline-none rounded-md shadow-md hover:bg-blue-600"
@@ -126,24 +160,17 @@ export default function UsersPage() {
           <option value="editor">Editor</option>
         </select> */}
 
-        <div
-          onClick={() => setIsuserAddModal(true)}
-          className="px-4 py-2 w-fit float-end bg-blue-500 text-white rounded-md shadow-md cursor-pointer hover:bg-blue-600"
-        >
-          Add User
-        </div>
-
         {isPageLoad ? (
           <p className="text-2xl text-blue-500 mt-20 font-semibold text-center">
             Loading ...
           </p>
         ) : user && user.length > 0 ? (
-          <div className="mx-auto max-w-4xl bg-white p-6 shadow-lg rounded-lg">
-            <h2 className="mb-4 text-center text-2xl font-bold text-gray-700">
+          <div className="w-full bg-white p-6 shadow-lg rounded-lg">
+            <h2 className="mb-4 text-center mobile:text-2xl text-xl font-bold text-gray-700">
               User List
             </h2>
-            <div className=" max-w-full overflow-x-scroll">
-              <table className="w-full border-collapse border border-gray-300 ">
+            <div className=" max-w-full overflow-x-auto">
+              <table className="w-full border-collapse border border-gray-300 mobile:text-base text-sm ">
                 <thead>
                   <tr className="bg-gray-200 text-gray-700">
                     <th className="border border-gray-300 px-4 py-2">Name</th>

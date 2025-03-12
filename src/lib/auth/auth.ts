@@ -31,10 +31,16 @@ export async function addUser(data: any) {
   }
 }
 
-export async function userList(data?: { page: number; perPage: number }) {
+export async function userList(data?: {
+  page: number;
+  perPage: number;
+  search?: string;
+}) {
   try {
     const response = await axiosInstance.get(
-      `admin/user/list?page=${data?.page}&perPage=${data?.perPage}`
+      `admin/user/list?page=${data?.page}&perPage=${data?.perPage}&search=${
+        data?.search || ""
+      } `
     );
     return response.data;
   } catch (error) {
