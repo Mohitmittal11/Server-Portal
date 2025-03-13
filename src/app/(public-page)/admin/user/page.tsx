@@ -143,7 +143,7 @@ export default function UsersPage() {
         />
         <button
           onClick={() => setIsuserAddModal(true)}
-          className="px-4 py-2 w-fit bg-blue-500 text-white rounded-md shadow-md cursor-pointer hover:bg-blue-600 text-nowrap mobile:text-base text-sm"
+          className="px-2 py-2 w-fit bg-blue-500 text-white rounded-md shadow-md cursor-pointer hover:bg-blue-600 text-nowrap mobile:text-base text-sm"
         >
           Add User
         </button>
@@ -196,7 +196,7 @@ export default function UsersPage() {
                         {user.isVerified ? "Verified" : "Not Verified"}
                       </td>
 
-                      <td className="px-4 py-2 space-x-2">
+                      <td className="px-4 py-2 lg:space-x-2 space-y-2 space-x-2  ">
                         {/* Edit Button */}
                         <button
                           onClick={() => handleUserDetails(user._id)}

@@ -20,7 +20,7 @@ const Header = () => {
 
   return (
     <Fragment>
-      <div className="flex justify-end p-5 mobile:pr-10 pr-3  mobile:gap-12 gap-4 bg-gray-300">
+      <div className="flex justify-end p-5 mobile:pr-10 pr-3 items-center mobile:gap-12 gap-4 bg-gray-300">
         {headerData.map((item, index: number) => {
           return (
             <Link

@@ -94,17 +94,26 @@ const AddEditServer: React.FC<AddEditServerInterface> = ({
         isAddServerOpen ? "block" : "hidden"
       }`}
     >
-      <h2 className="text-2xl font-semibold mb-4">Add Server Details</h2>
+      <h2 className="md:text-2xl text-xl font-semibold mb-4">
+        Add Server Details
+      </h2>
 
-      <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
+      <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-3">
         <div>
-          <label className="block font-medium mb-1">Project Name</label>
+          <label className=" md:text-base text-sm block font-medium mb-1">
+            Project Name
+          </label>
           <input
+            onKeyDown={(e) => {
+              if (e.code == "Space" && !e.currentTarget.value) {
+                e.preventDefault();
+              }
+            }}
             type="text"
             {...register("project_name", {
               required: "Project Name is required",
             })}
-            className="w-full border rounded-lg px-3 py-2 focus:ring-2 focus:ring-blue-500"
+            className="w-full border rounded-lg px-3 py-2 focus:ring-2 focus:ring-blue-500 md:placeholder:text-base placeholder:text-sm"
             placeholder="Enter project name"
           />
           {errors.project_name && (
@@ -114,15 +123,13 @@ const AddEditServer: React.FC<AddEditServerInterface> = ({
           )}
         </div>
 
-        <div className="flex justify-between items-center">
-          <label className="block font-medium mb-1">Environment</label>
-        </div>
         <SelectCompo
           name={"environment"}
           options={serverDropdown}
           onChange={(item: any) => handleEnvironmentChange(item)}
           placeholder="Select Environment"
           value={selectedEnv.label ? selectedEnv : 0}
+          lblTextLeft="Environment"
         />
         {errors.environment && (
           <p className="text-red-500 text-xs mt-1">
@@ -135,13 +142,15 @@ const AddEditServer: React.FC<AddEditServerInterface> = ({
           <>
             {/* Server Port */}
             <div>
-              <label className="block font-medium mb-1">Server Port</label>
+              <label className="block font-medium mb-1 md:text-base text-sm">
+                Server Port
+              </label>
               <input
                 type="number"
                 {...register("serverPort", {
                   required: "Server Port is required",
                 })}
-                className="w-full border rounded-lg px-3 py-2 focus:ring-2 focus:ring-blue-500"
+                className="w-full border rounded-lg px-3 py-2 focus:ring-2 focus:ring-blue-500 md:placeholder:text-base placeholder:text-sm"
                 placeholder="Enter server port"
               />
               {errors.serverPort && (
@@ -153,11 +162,13 @@ const AddEditServer: React.FC<AddEditServerInterface> = ({
 
             {/* NPM Port */}
             <div>
-              <label className="block font-medium mb-1">NPM Port</label>
+              <label className="block font-medium mb-1 md:text-base text-sm">
+                NPM Port
+              </label>
               <input
                 type="number"
                 {...register("npmPort", { required: "NPM Port is required" })}
-                className="w-full border rounded-lg px-3 py-2 focus:ring-2 focus:ring-blue-500"
+                className="w-full border rounded-lg px-3 py-2 focus:ring-2 focus:ring-blue-500 md:placeholder:text-base placeholder:text-sm"
                 placeholder="Enter npm port"
               />
               {errors.npmPort && (
@@ -169,13 +180,20 @@ const AddEditServer: React.FC<AddEditServerInterface> = ({
 
             {/* Server String */}
             <div>
-              <label className="block font-medium mb-1">Server String</label>
+              <label className="block font-medium mb-1 md:text-base text-sm">
+                Server String
+              </label>
               <input
+                onKeyDown={(e) => {
+                  if (e.code == "Space" && !e.currentTarget.value) {
+                    e.preventDefault();
+                  }
+                }}
                 type="text"
                 {...register("serverString", {
                   required: "Server String is required",
                 })}
-                className="w-full border rounded-lg px-3 py-2 focus:ring-2 focus:ring-blue-500"
+                className="w-full border rounded-lg px-3 py-2 focus:ring-2 focus:ring-blue-500 md:placeholder:text-base placeholder:text-sm"
                 placeholder="Enter server string"
               />
               {errors.serverString && (
@@ -192,13 +210,13 @@ const AddEditServer: React.FC<AddEditServerInterface> = ({
           <button
             onClick={() => handleCancelButton()}
             type="button"
-            className="w-full bg-white text-black border border-blue-500 font-semibold py-2 rounded-lg hover:bg-blue-500 hover:text-white"
+            className="w-full bg-white text-black border border-blue-500 md:py-2 font-semibold py-2 rounded-lg hover:bg-blue-500 hover:text-white md:text-base text-sm"
           >
             Cancel
           </button>
           <button
             type="submit"
-            className="w-full bg-blue-500 text-white font-semibold py-2 rounded-lg hover:bg-blue-700"
+            className="w-full bg-blue-500 text-white font-semibold md:py-2 rounded-lg hover:bg-blue-700 md:text-base text-sm "
           >
             {serverDetails && isLoading
               ? "Updating"

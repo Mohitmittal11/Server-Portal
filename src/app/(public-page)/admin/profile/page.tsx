@@ -18,7 +18,7 @@ const Profile = () => {
         </p>
       ) : (
         <div className="mt-28">
-          <div className="flex justify-center gap-10 border max-w-fit p-10 bg-zinc-200 m-auto shadow-slate-300">
+          <div className="flex-cols mobile:flex mobile:gap-8 justify-center border max-w-fit p-10 bg-zinc-200 m-auto shadow-slate-300">
             <p className="text-gray-500 font-medium">
               Name
               <span className="block text-blue-500">

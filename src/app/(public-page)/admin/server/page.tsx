@@ -151,18 +151,18 @@ const Page = () => {
         </p>
       ) : (
         <div className={isAddServerOpen ? "hidden" : "block"}>
-          <div className="flex justify-end gap-6 mr-4">
+          <div className="flex mobile:justify-end justify-between gap-6 items-center pr-4">
             <input
               onChange={handleSearch}
               type="text"
               name="search"
               id="search"
               placeholder="Search by Project Name"
-              className="border h-8 pl-3 bg-gray-100 focus:outline-none focus-within:text-gray-500 placeholder:text-sm placeholder:text-gray-400 border-t-transparent border-x-transparent"
+              className="border mobile:max-w-sm max-w-lg h-8 mobile:pl-3 pl-1 bg-gray-100 focus:outline-none focus-within:text-gray-500 mobile:placeholder:text-sm placeholder:text-xs text-[12px] placeholder:text-gray-400 border-t-transparent border-x-transparent"
             />
             <button
               onClick={handleAddServer}
-              className="bg-blue-500 text-white px-4 py-2 font-medium shadow-md rounded-md cursor-pointer hover:bg-blue-700 transition-all"
+              className="px-2 py-1.5 w-fit bg-blue-500 text-white rounded-md shadow-md cursor-pointer hover:bg-blue-600 text-nowrap md:text-base text-sm font-medium"
             >
               ADD Server
             </button>
@@ -171,7 +171,7 @@ const Page = () => {
           {/* Table Container */}
           {server.length > 0 ? (
             <div className="max-w-screen mx-auto mt-10 p-4 overflow-x-auto">
-              <table className="w-full border border-gray-300 shadow-lg rounded-lg overflow-hidden">
+              <table className="w-full border border-gray-300 shadow-lg rounded-lg overflow-hidden md:text-base text-sm">
                 {/* Table Header */}
                 <thead className="bg-gray-800 text-white">
                   <tr className="text-center">
@@ -200,7 +200,7 @@ const Page = () => {
                             {item.serverString}
                           </td>
                           <td className="border p-3">{item.npmPort}</td>
-                          <td className="px-4 py-2 md:space-x-2 space-y-2">
+                          <td className="px-4 py-2 lg:space-x-2 space-y-2 space-x-2 ">
                             {/* Edit Button */}
                             <button
                               onClick={() => handleUserDetails(item._id)}
@@ -238,7 +238,7 @@ const Page = () => {
         </div>
       )}
 
-      <div className="mt-12">
+      <div className="mt-20">
         <AddEditServer
           setISAddServerOpen={setISAddServerOpen}
           isAddServerOpen={isAddServerOpen}

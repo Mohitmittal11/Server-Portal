@@ -26,10 +26,6 @@ export default function LoginPage() {
 
   const [isPasswordShow, setIsPasswordShow] = useState<boolean>(false);
   const [isLoading, setIsLoading] = useState<boolean>(false);
-  // const [password, setPass]
-  // useEffect(() => {
-  //   toastifySuccess(`hello`, new Date().getTime().toString());
-  // }, []);
 
   const router = useRouter();
   const onSubmit = async (data: AdminLogin) => {
@@ -53,7 +49,13 @@ export default function LoginPage() {
 
   return (
     <div className="flex min-h-screen items-center justify-center bg-gray-100 px-2">
-      <div className="w-full max-w-md rounded-lg bg-white p-6 shadow-lg">
+      <div className="w-full max-w-md rounded-lg bg-white p-6 shadow-lg relative">
+        <div
+          onClick={() => router.push("/")}
+          className="absolute -top-6 left-0 cursor-pointer"
+        >
+          <img src="/images/leftArrow.svg" alt="leftArrow" className="w-5" />
+        </div>
         <h2 className="mb-6 text-center mobile:text-2xl text-xl  font-bold text-gray-700">
           Admin Login
         </h2>
@@ -65,6 +67,11 @@ export default function LoginPage() {
               Email
             </label>
             <input
+              onKeyDown={(e) => {
+                if (e.code == "Space" && !e.currentTarget.value) {
+                  e.preventDefault();
+                }
+              }}
               type="email"
               {...register("email", {
                 required: "Email is required",
@@ -90,6 +97,11 @@ export default function LoginPage() {
             </label>
             <div className="relative">
               <input
+                onKeyDown={(e) => {
+                  if (e.code == "Space" && !e.currentTarget.value) {
+                    e.preventDefault();
+                  }
+                }}
                 type={isPasswordShow ? "text" : "password"}
                 {...register("password", {
                   required: "Password is required",
