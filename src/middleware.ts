@@ -1,6 +1,12 @@
 import { NextResponse, NextRequest } from "next/server";
 const publicPage = ["/", "/admin/login", "/user/login", "/user/reset-password"];
-const protectedRoutes = ["/admin/user", "/admin/server", "/user"];
+const protectedRoutes = [
+  "/admin/user",
+  "/admin/server",
+  "/user",
+  "/user/profile",
+  "/admin/profile",
+];
 
 export async function middleware(req: NextRequest) {
   const { cookies, nextUrl } = req;
@@ -61,5 +67,7 @@ export const config = {
     "/admin/server",
     "/user/reset-password",
     "/user",
+    "/user/profile",
+    "/admin/profile",
   ],
 };

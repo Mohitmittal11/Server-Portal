@@ -1,6 +1,4 @@
 import { ReactNode } from "react";
-import { Metadata } from "next";
-import Logout from "@/components/Logout";
 import AdminHeader from "@/components/Admin/AdminHeader/page";
 
 // export const metadata: Metadata = {
@@ -13,7 +11,7 @@ const Layout = ({ children }: { children: ReactNode }) => {
     <div className="min-h-screen bg-gray-100">
       {/* <Logout /> */}
       <AdminHeader />
-      <main className="p-6">{children}</main>
+      <main className="p-2">{children}</main>
     </div>
   );
 };

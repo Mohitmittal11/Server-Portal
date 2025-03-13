@@ -86,7 +86,7 @@ export default function SelectCompo(props: SelectCompoProps) {
             option: (styles, { isSelected }) => ({
               ...styles,
               cursor: "pointer",
-              color: isSelected ? "#0000FF" : "#767677",
+              color: isSelected ? "#000000" : "#767677",
               backgroundColor: "transparent",
             }),
 
@@ -105,13 +105,13 @@ export default function SelectCompo(props: SelectCompoProps) {
                 borderColor: "none",
               },
               "&::placeholder": {
-                color: "#767677",
-                fontWeight: "500",
+                color: "#F5F5F5",
               },
               "@media (max-width: 767px)": {
                 minHeight: "30px",
                 marginTop: "1px",
                 borderRadius: "8px",
+                paddingTop: "2px",
               },
             }),
             menu: (provided) => ({

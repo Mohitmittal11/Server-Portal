@@ -5,9 +5,11 @@ import React, { Fragment, useState } from "react";
 import { useRouter } from "next/navigation";
 import useUserAuthStore from "@/stores/userAuthStore";
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 
 const AdminHeader = () => {
   const [sidebarOpen, setSideBarOpen] = useState<boolean>(false);
+  const pathname = usePathname();
   const { setAuthData } = useUserAuthStore();
   const router = useRouter();
   const handleAdminSideBarOpen = () => {
@@ -35,17 +37,32 @@ const AdminHeader = () => {
       router.push("/");
     }
   };
+
+  const headerData = [{ label: "Home", path: "/admin/user" }];
+
+  const AdminSidebarData = [
+    { label: "My Profile", path: "/admin/profile" },
+    { label: "Server", path: "/admin/server" },
+  ];
+
   return (
     <Fragment>
       <div className="bg-blue-500 flex justify-end gap-8 items-center px-5 py-4 relative">
-        <div className="">
-          <Link
-            href={"/"}
-            className="text-white font-medium px-2 py-1 rounded-sm text-base font-sans"
-          >
-            Home
-          </Link>
-        </div>
+        {headerData.map((item, index) => {
+          return (
+            <Link
+              key={index}
+              href={item.path}
+              className={`font-medium px-2 rounded-md mobile:text-base text-sm font-sans ${
+                item.path === pathname
+                  ? "text-gray-500 bg-gray-100 py-0.5"
+                  : "text-white"
+              }`}
+            >
+              Home
+            </Link>
+          );
+        })}
         <div>
           <img
             onClick={() => {
@@ -64,7 +81,23 @@ const AdminHeader = () => {
           >
             <div>
               <ul className="flex flex-col gap-3">
-                <Link
+                {AdminSidebarData.map((item, index) => {
+                  return (
+                    <Link
+                      key={index}
+                      href={item.path}
+                      className={`cursor-pointer
+                    w-full text-center py-1 px-5 mobile:text-base text-sm  ${
+                      pathname === item.path
+                        ? "bg-blue-500 text-white font-medium rounded-lg  "
+                        : "hover:text-blue-500"
+                    }`}
+                    >
+                      {item.label}
+                    </Link>
+                  );
+                })}
+                {/* <Link
                   href={"/admin/profile"}
                   className="cursor-pointer hover:bg-blue-500 hover:text-white w-full  px-4 text-center py-1 hover:rounded-lg"
                 >
@@ -76,10 +109,10 @@ const AdminHeader = () => {
                 w-full text-center py-1 hover:rounded-lg"
                 >
                   Server
-                </Link>
+                </Link> */}
                 <li
                   onClick={() => handleAdminLogout()}
-                  className="cursor-pointer hover:bg-blue-500 hover:text-white w-full text-center py-1 hover:rounded-lg"
+                  className="cursor-pointer hover:text-blue-500 w-full text-center py-1 mobile:text-base text-sm "
                 >
                   LogOut
                 </li>

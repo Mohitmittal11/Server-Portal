@@ -10,13 +10,9 @@ import Footer from "@/components/user/Footer";
 const Layout = ({ children }: { children: ReactNode }) => {
   return (
     <div>
-      <div className="relative">
-        <Header />
-        <main className="p-6">{children}</main>
-      </div>
-      <div className="absolute bottom-0 w-full">
-        <Footer />
-      </div>
+      <Header />
+      <div className="w-full min-h-[calc(100vh-133px)]">{children}</div>
+      <Footer />
     </div>
   );
 };

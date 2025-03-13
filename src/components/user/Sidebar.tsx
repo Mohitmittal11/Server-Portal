@@ -3,10 +3,11 @@ import React, { useRef } from "react";
 import Link from "next/link";
 import useUserAuthStore from "@/stores/userAuthStore";
 import { useRouter } from "next/navigation";
-import path from "path";
+import { usePathname } from "next/navigation";
 
 const UserSidebar = () => {
   const { setAuthData } = useUserAuthStore();
+  const pathname = usePathname();
   const router = useRouter();
   const SidebarData = [
     { label: "My Profile", path: "/user/profile" },
@@ -40,7 +41,9 @@ const UserSidebar = () => {
             {item.path !== "/logout" ? (
               <Link
                 href={item.path}
-                className="block text-gray-700 text-sm font-medium px-4 py-2 hover:bg-gray-200 rounded-md transition"
+                className={`block text-gray-700 text-sm font-medium px-4 py-2 hover:bg-gray-200 rounded-md transition ${
+                  pathname === item.path && "bg-blue-500 text-white"
+                }`}
               >
                 {item.label}
               </Link>

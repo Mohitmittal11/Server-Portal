@@ -27,10 +27,16 @@ export async function ServerDetails(id: string) {
   }
 }
 
-export async function ListServer(data: { page?: number; perPage?: number }) {
+export async function ListServer(data: {
+  page?: number;
+  perPage?: number;
+  search?: string;
+}) {
   try {
     const res = await axiosInstance.get(
-      `admin/server/list?page=${data.page}&perPage=${data.perPage}`
+      `admin/server/list?page=${data.page}&perPage=${data.perPage}&search=${
+        data.search || ""
+      }`
     );
     return res.data;
   } catch (error) {

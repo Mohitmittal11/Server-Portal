@@ -22,18 +22,33 @@ const Page = () => {
   const [page, setPage] = useState<number>(1);
   const [totalCount, setTotalCount] = useState<number>(1);
   const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [searchTerm, setSearchTerm] = useState<string>("");
 
   const perPage = 10;
   useEffect(() => {
-    serverList({ page: page, perPage: perPage });
+    serverList({ page: page, perPage: perPage, search: searchTerm });
   }, [page, perPage]);
-  const serverList = async (data: { page?: number; perPage?: number }) => {
+
+  useEffect(() => {
+    const delayDebounceFn = setTimeout(async () => {
+      await serverList({ page: 1, perPage: perPage, search: searchTerm });
+    }, 300);
+
+    return () => clearTimeout(delayDebounceFn);
+  }, [searchTerm]);
+
+  const serverList = async (data: {
+    page: number;
+    perPage?: number;
+    search?: string;
+  }) => {
     try {
       const result = await ListServer(data);
       if (result.code === 200) {
         setServer(result.data);
         setTotalCount(result.totalCount);
         setIsListLoading(false);
+        setPage(data?.page);
       }
     } catch (error) {
       console.log("Error that is ", error);
@@ -123,6 +138,11 @@ const Page = () => {
   const handlePageClick = useCallback(async (page: { selected: number }) => {
     setPage(page.selected + 1);
   }, []);
+
+  const handleSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setSearchTerm(e.target.value);
+  };
+
   return (
     <Fragment>
       {isListLoading ? (
@@ -131,68 +151,82 @@ const Page = () => {
         </p>
       ) : (
         <div className={isAddServerOpen ? "hidden" : "block"}>
-          <div className="flex justify-end mr-4">
+          <div className="flex mobile:justify-end justify-between gap-6 items-center pr-4">
+            <input
+              onChange={handleSearch}
+              type="text"
+              name="search"
+              id="search"
+              placeholder="Search by Project Name"
+              className="border mobile:max-w-sm max-w-lg h-8 mobile:pl-3 pl-1 bg-gray-100 focus:outline-none focus-within:text-gray-500 mobile:placeholder:text-sm placeholder:text-xs text-[12px] placeholder:text-gray-400 border-t-transparent border-x-transparent"
+            />
             <button
               onClick={handleAddServer}
-              className="bg-blue-500 text-white px-4 py-2 font-medium shadow-md rounded-md cursor-pointer hover:bg-blue-700 transition-all"
+              className="px-2 py-1.5 w-fit bg-blue-500 text-white rounded-md shadow-md cursor-pointer hover:bg-blue-600 text-nowrap md:text-base text-sm font-medium"
             >
               ADD Server
             </button>
           </div>
 
           {/* Table Container */}
-          <div className="max-w-screen mx-auto mt-10 p-4 overflow-x-auto">
-            <table className="w-full border border-gray-300 shadow-lg rounded-lg overflow-hidden">
-              {/* Table Header */}
-              <thead className="bg-gray-800 text-white">
-                <tr className="text-center">
-                  <th className="border border-gray-400 p-3">Project Name</th>
-                  <th className="border border-gray-400 p-3">Environment</th>
-                  <th className="border border-gray-400 p-3">Server Port</th>
-                  <th className="border border-gray-400 p-3">Server URL</th>
-                  <th className="border border-gray-400 p-3">NPM Port</th>
-                  <th className="border border-gray-400 p-3">Action</th>
-                </tr>
-              </thead>
+          {server.length > 0 ? (
+            <div className="max-w-screen mx-auto mt-10 p-4 overflow-x-auto">
+              <table className="w-full border border-gray-300 shadow-lg rounded-lg overflow-hidden md:text-base text-sm">
+                {/* Table Header */}
+                <thead className="bg-gray-800 text-white">
+                  <tr className="text-center">
+                    <th className="border border-gray-400 p-3">Project Name</th>
+                    <th className="border border-gray-400 p-3">Environment</th>
+                    <th className="border border-gray-400 p-3">Server Port</th>
+                    <th className="border border-gray-400 p-3">Server URL</th>
+                    <th className="border border-gray-400 p-3">NPM Port</th>
+                    <th className="border border-gray-400 p-3">Action</th>
+                  </tr>
+                </thead>
 
-              {/* Table Body */}
-              <tbody>
-                {/* Example Row */}
-                {server.map((item, index) => {
-                  return (
-                    <>
-                      <tr className="text-center bg-gray-100 hover:bg-gray-200 transition-all">
-                        <td className="border p-3 font-semibold">
-                          {item.project_name}
-                        </td>
-                        <td className="border p-3">{item.type}</td>
-                        <td className="border p-3">{item.serverPort}</td>
-                        <td className="border p-3 text-blue-600 underline cursor-pointer">
-                          {item.serverString}
-                        </td>
-                        <td className="border p-3">{item.npmPort}</td>
-                        <td className="px-4 py-2 md:space-x-2 space-y-2">
-                          {/* Edit Button */}
-                          <button
-                            onClick={() => handleUserDetails(item._id)}
-                            className="rounded bg-blue-500 px-3 py-1 text-white hover:bg-blue-600"
-                          >
-                            Edit
-                          </button>
-                          <button
-                            className="rounded bg-red-500 px-3 py-1 text-white hover:bg-red-600"
-                            onClick={() => handleDelete(item._id)}
-                          >
-                            Delete
-                          </button>
-                        </td>
-                      </tr>
-                    </>
-                  );
-                })}
-              </tbody>
-            </table>
-          </div>
+                {/* Table Body */}
+                <tbody>
+                  {/* Example Row */}
+                  {server.map((item, index) => {
+                    return (
+                      <>
+                        <tr className="text-center bg-gray-100 hover:bg-gray-200 transition-all">
+                          <td className="border p-3 font-semibold">
+                            {item.project_name}
+                          </td>
+                          <td className="border p-3">{item.type}</td>
+                          <td className="border p-3">{item.serverPort}</td>
+                          <td className="border p-3 text-blue-600 underline cursor-pointer">
+                            {item.serverString}
+                          </td>
+                          <td className="border p-3">{item.npmPort}</td>
+                          <td className="px-4 py-2 lg:space-x-2 space-y-2 space-x-2 ">
+                            {/* Edit Button */}
+                            <button
+                              onClick={() => handleUserDetails(item._id)}
+                              className="rounded bg-blue-500 px-3 py-1 text-white hover:bg-blue-600"
+                            >
+                              Edit
+                            </button>
+                            <button
+                              className="rounded bg-red-500 px-3 py-1 text-white hover:bg-red-600"
+                              onClick={() => handleDelete(item._id)}
+                            >
+                              Delete
+                            </button>
+                          </td>
+                        </tr>
+                      </>
+                    );
+                  })}
+                </tbody>
+              </table>
+            </div>
+          ) : (
+            <p className="text-center mt-12 text-2xl text-blue-500 font-semibold ">
+              No Data Found
+            </p>
+          )}
           {totalCount > perPage && (
             <Pagination
               page={page}
@@ -204,7 +238,7 @@ const Page = () => {
         </div>
       )}
 
-      <div className="mt-12">
+      <div className="mt-20">
         <AddEditServer
           setISAddServerOpen={setISAddServerOpen}
           isAddServerOpen={isAddServerOpen}

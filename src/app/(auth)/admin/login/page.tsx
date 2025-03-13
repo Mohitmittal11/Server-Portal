@@ -26,10 +26,6 @@ export default function LoginPage() {
 
   const [isPasswordShow, setIsPasswordShow] = useState<boolean>(false);
   const [isLoading, setIsLoading] = useState<boolean>(false);
-  // const [password, setPass]
-  // useEffect(() => {
-  //   toastifySuccess(`hello`, new Date().getTime().toString());
-  // }, []);
 
   const router = useRouter();
   const onSubmit = async (data: AdminLogin) => {
@@ -52,19 +48,30 @@ export default function LoginPage() {
   };
 
   return (
-    <div className="flex min-h-screen items-center justify-center bg-gray-100">
-      <div className="w-full max-w-md rounded-lg bg-white p-6 shadow-lg">
-        <h2 className="mb-6 text-center text-2xl font-bold text-gray-700">
+    <div className="flex min-h-screen items-center justify-center bg-gray-100 px-2">
+      <div className="w-full max-w-md rounded-lg bg-white p-6 shadow-lg relative">
+        <div
+          onClick={() => router.push("/")}
+          className="absolute -top-6 left-0 cursor-pointer"
+        >
+          <img src="/images/leftArrow.svg" alt="leftArrow" className="w-5" />
+        </div>
+        <h2 className="mb-6 text-center mobile:text-2xl text-xl  font-bold text-gray-700">
           Admin Login
         </h2>
 
         <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
           {/* Email Field */}
           <div>
-            <label className="block text-sm font-medium text-gray-600">
+            <label className="block mobile:text-base text-xs font-medium text-gray-600">
               Email
             </label>
             <input
+              onKeyDown={(e) => {
+                if (e.code == "Space" && !e.currentTarget.value) {
+                  e.preventDefault();
+                }
+              }}
               type="email"
               {...register("email", {
                 required: "Email is required",
@@ -73,7 +80,7 @@ export default function LoginPage() {
                   message: "Enter a valid email",
                 },
               })}
-              className="mt-1 w-full rounded-md border border-gray-300 px-3 py-2 text-gray-900 focus:border-blue-500 focus:ring-blue-500"
+              className="mt-1 w-full rounded-md border border-gray-300 px-3 py-2 text-gray-900 focus:border-blue-500 focus:ring-blue-500 mobile:placeholder:text-base placeholder:text-sm"
               placeholder="Enter your email"
             />
             {errors.email && (
@@ -85,11 +92,16 @@ export default function LoginPage() {
 
           {/* Password Field */}
           <div>
-            <label className="block text-sm font-medium text-gray-600">
+            <label className="block mobile:text-sm text-xs font-medium text-gray-600">
               Password
             </label>
             <div className="relative">
               <input
+                onKeyDown={(e) => {
+                  if (e.code == "Space" && !e.currentTarget.value) {
+                    e.preventDefault();
+                  }
+                }}
                 type={isPasswordShow ? "text" : "password"}
                 {...register("password", {
                   required: "Password is required",
@@ -105,7 +117,7 @@ export default function LoginPage() {
                       "Password must contain at least 8 characters, one uppercase letter, one lowercase letter, one number, and one special character.",
                   },
                 })}
-                className="mt-1 w-full rounded-md border border-gray-300 px-3 py-2 text-gray-900 focus:border-blue-500 focus:ring-blue-500"
+                className="mt-1 w-full rounded-md border border-gray-300 px-3 py-2 text-gray-900 focus:border-blue-500 focus:ring-blue-500 mobile:placeholder:text-base placeholder:text-sm"
                 placeholder="Enter your password"
               />
               {errors.password && (
@@ -138,7 +150,7 @@ export default function LoginPage() {
           {/* Submit Button */}
           <button
             type="submit"
-            className="w-full rounded-md bg-blue-500 px-4 py-2 text-white transition hover:bg-blue-600"
+            className="w-full rounded-md bg-blue-500 px-4 py-2 text-white transition hover:bg-blue-600 mobile:text-base text-sm"
           >
             {isLoading ? <Loader /> : "Login"}
           </button>
